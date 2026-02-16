@@ -1,0 +1,538 @@
+{
+  "info": {
+    "_postman_id": "bf253b7d-6e06-4a8f-bc78-919dafce0c47",
+    "name": "Simple Book API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52406586",
+    "_collection_link": "https://go.postman.co/collection/52406586-bf253b7d-6e06-4a8f-bc78-919dafce0c47?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "API Status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.execution.setNextRequest(\"List of books\");\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://simple-books-api.click/status",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List of books",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "// test to get non fictional books only if they are available\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "const nonFictionBooks = response.filter((book) => book.available === true);\r",
+              "\r",
+              "// in case there is no book available\r",
+              "\r",
+              "const book = nonFictionBooks[0];\r",
+              "\r",
+              "\r",
+              "pm.test(\"Book found\" , () => {\r",
+              "\r",
+              "    pm.expect(book).to.be.an('object');\r",
+              "    pm.expect(book.available).to.be.true;\r",
+              "    pm.expect(book.available).to.equal(true);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.globals.set(\"bookId\", book.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://simple-books-api.click/books?limit=&type=non-fiction",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "books"
+          ],
+          "query": [
+            {
+              "key": "limit",
+              "value": ""
+            },
+            {
+              "key": "type",
+              "value": "non-fiction"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get single book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "//test to know if a book is in stock\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Is in stock\", () => {\r",
+              "\r",
+              "    pm.expect(response['current-stock']).to.be.above(0);\r",
+              "}\r",
+              ");\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://simple-books-api.click/books/:bookId",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "books",
+            ":bookId"
+          ],
+          "variable": [
+            {
+              "key": "bookId",
+              "value": "{{bookId}}"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Order book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", () => {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"bookId\": 1,\r\n  \"customerName\": \"John\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://simple-books-api.click/orders",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get all book orders",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://simple-books-api.click/orders",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "orders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get an order",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://simple-books-api.click/orders/:orderId",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "orders",
+            ":orderId"
+          ],
+          "variable": [
+            {
+              "key": "orderId",
+              "value": "DAkbygUHrPFkhvvMtVyfG"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update an order",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 204\", () => {\r",
+              "    pm.response.to.have.status(204);\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"John {{$randomLastName}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://simple-books-api.click/orders/:orderId",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "orders",
+            ":orderId"
+          ],
+          "variable": [
+            {
+              "key": "orderId",
+              "value": "fqbm5M_-8QEyF_otGjZgu"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete an order",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 204\", () => {\r",
+              "    pm.response.to.have.status(204);\r",
+              "});\r",
+              "pm.execution.setNextRequest(null);\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{accessToken}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"customerName\": \"John {{$randomLastName}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://simple-books-api.click/orders/:orderId",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "orders",
+            ":orderId"
+          ],
+          "variable": [
+            {
+              "key": "orderId",
+              "value": "fqbm5M_-8QEyF_otGjZgu"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register API Client",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"clientName\": \"Abdullah\",\r\n   \"clientEmail\": \"abdullah@example.com\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://simple-books-api.click/api-clients",
+          "protocol": "https",
+          "host": [
+            "simple-books-api",
+            "click"
+          ],
+          "path": [
+            "api-clients"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://simple-books-api.click"
+    },
+    {
+      "key": "accessToken",
+      "value": "0bad364829af02781552e7bdc8c38e218b14d33dec30499098af93cb08892e7b"
+    },
+    {
+      "key": "BookId",
+      "value": "5"
+    }
+  ]
+}
