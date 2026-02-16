@@ -1,0 +1,62 @@
+C:\Users\abdul>newman run https://api.postman.com/collections/52406586-bf253b7d-6e06-4a8f-bc78-919dafce0c47?access_key=PMAT-01KHHCXWQ0HH80KS0XJJG92C1Q --reporters cli,htmlextra
+(node:12752) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+newman
+
+Simple Book API
+
+→ API Status
+  GET https://simple-books-api.click/status [200 OK, 754B, 1843ms]
+  √  Status code is 200
+
+Attempting to set next request to List of books
+
+→ List of books
+  GET https://simple-books-api.click/books?limit=&type=non-fiction [200 OK, 875B, 364ms]
+  √  Status code is 200
+  √  Book found
+
+→ Get single book
+  GET https://simple-books-api.click/books/5 [200 OK, 1.02kB, 289ms]
+  √  Status code is 200
+  √  Is in stock
+
+→ Order book
+  POST https://simple-books-api.click/orders [201 Created, 794B, 808ms]
+  √  Status code is 201
+
+→ Get all book orders
+  GET https://simple-books-api.click/orders [200 OK, 2.9kB, 684ms]
+  √  Status code is 200
+
+→ Get an order
+  GET https://simple-books-api.click/orders/DAkbygUHrPFkhvvMtVyfG [200 OK, 849B, 345ms]
+  √  Status code is 200
+
+→ Update an order
+  PATCH https://simple-books-api.click/orders/fqbm5M_-8QEyF_otGjZgu [204 No Content, 746B, 712ms]
+  √  Status code is 204
+
+→ Delete an order
+  DELETE https://simple-books-api.click/orders/fqbm5M_-8QEyF_otGjZgu [204 No Content, 746B, 696ms]
+  √  Status code is 204
+
+┌─────────────────────────┬─────────────────────┬─────────────────────┐
+│                         │            executed │              failed │
+├─────────────────────────┼─────────────────────┼─────────────────────┤
+│              iterations │                   1 │                   0 │
+├─────────────────────────┼─────────────────────┼─────────────────────┤
+│                requests │                   8 │                   0 │
+├─────────────────────────┼─────────────────────┼─────────────────────┤
+│            test-scripts │                  16 │                   0 │
+├─────────────────────────┼─────────────────────┼─────────────────────┤
+│      prerequest-scripts │                   8 │                   0 │
+├─────────────────────────┼─────────────────────┼─────────────────────┤
+│              assertions │                  10 │                   0 │
+├─────────────────────────┴─────────────────────┴─────────────────────┤
+│ total run duration: 6.6s                                            │
+├─────────────────────────────────────────────────────────────────────┤
+│ total data received: 2.75kB (approx)                                │
+├─────────────────────────────────────────────────────────────────────┤
+│ average response time: 717ms [min: 289ms, max: 1843ms, s.d.: 464ms] │
+└─────────────────────────────────────────────────────────────────────┘
